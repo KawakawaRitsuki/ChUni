@@ -9,6 +9,11 @@ public class Main : MonoBehaviour {
     float timer = 0;
     int i = 0;
 
+    private void Start()
+    {
+        FileLoader fl = new FileLoader("");
+    }
+
     void Update()
     {
         timer -= Time.deltaTime; //タイマーを減らす
@@ -21,7 +26,7 @@ public class Main : MonoBehaviour {
     // 敵を生成するメソッド
     void Spawn()
     {
-        GameObject red = Instantiate(prefab);
+        GameObject red = Instantiate(prefab,transform.position,transform.rotation);
         Red r = red.GetComponent<Red>();
         r.Create(4,4);
         i++;
