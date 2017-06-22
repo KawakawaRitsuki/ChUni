@@ -7,11 +7,14 @@
     // 2 hold
     int hold = 0;
 
-    public NotesModel(int size,int pos,int color)
+    int bpm = 0;
+
+    public NotesModel(int size,int pos,int color,int bpm)
     {
         setSize(size);
         setPos(pos);
         setColor(color);
+        setBPM(bpm);
     }
     public int getSize()
     {
@@ -44,5 +47,13 @@
     public void setHold(int h)
     {
         hold = h;
+    }
+    public int getBPM()
+    {
+        return bpm;
+    }
+    public void setBPM(int b)
+    {
+        bpm = b;
     }
 }

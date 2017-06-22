@@ -55,7 +55,7 @@ public class FileLoader{
         }
         notes = end - start + 1;
 
-        int space = 0;
+        int rhythm = 0;
 
 
         int now = start;
@@ -95,7 +95,7 @@ public class FileLoader{
                             case ':':
                                 if (target.StartsWith(":RHYTHM="))
                                 {
-                                    space = maxrhythm / int.Parse(target.Substring(8)) - 1;
+                                    rhythm = int.Parse(target.Substring(8));
                                     i = target.Length;
                                     continue;
                                 }
@@ -108,7 +108,7 @@ public class FileLoader{
                             case '2':
                             case 'R':
                                 size++;
-                                list[count].Add(new NotesModel(size, pos,0));
+                                list[count].Add(new NotesModel(size, pos,0,bpm));
                                 size = 0;
                                 tmp = "";
                                 break;
@@ -116,7 +116,7 @@ public class FileLoader{
                                 size++;
                                 break;
                             default:
-                                list[count].Add(new NotesModel(size, pos, 0));
+                                list[count].Add(new NotesModel(size, pos, 0, bpm));
                                 size = 0;
                                 tmp = "";
                                 break;
@@ -128,7 +128,7 @@ public class FileLoader{
                             case '2':
                             case 'Y':
                                 size++;
-                                list[count].Add(new NotesModel(size, pos, 1));
+                                list[count].Add(new NotesModel(size, pos, 1, bpm));
                                 size = 0;
                                 tmp = "";
                                 break;
@@ -136,7 +136,7 @@ public class FileLoader{
                                 size++;
                                 break;
                             default:
-                                list[count].Add(new NotesModel(size, pos, 1));
+                                list[count].Add(new NotesModel(size, pos, 1, bpm));
                                 size = 0;
                                 tmp = "";
                                 break;
@@ -160,12 +160,13 @@ public class FileLoader{
                                     if (split[j].ToCharArray()[pos] == 'N' ||
                                        split[j].ToCharArray()[i] == 'N')
                                     {
-                                        hold++;
                                         break;
                                     }
                                 }
+                                
+                                hold = hold * (maxrhythm / rhythm);
 
-                                NotesModel nm = new NotesModel(size, pos, 2);
+                                NotesModel nm = new NotesModel(size, pos, 2, bpm);
                                 nm.setHold(hold);
                                 list[count].Add(nm);
                                 size = 0;
@@ -175,7 +176,7 @@ public class FileLoader{
                                 size++;
                                 break;
                             default:
-                                list[count].Add(new NotesModel(size, pos, 0));
+                                list[count].Add(new NotesModel(size, pos, 0, bpm));
                                 size = 0;
                                 tmp = "";
                                 break;
@@ -183,8 +184,10 @@ public class FileLoader{
                         break;
                 }
             }
-            for (int i = 0; i < space; i++)
+            for (int i = 0; i < maxrhythm / rhythm - 1; i++)
             {
+                if (target.StartsWith(":")) break;
+                Debug.Log(target);
                 list.Add(new List<NotesModel>());
                 count++;
             }
