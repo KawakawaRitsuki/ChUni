@@ -77,7 +77,11 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\FileLoader.cs" />
     <Compile Include="Assets\Scripts\Main.cs" />
-    <Compile Include="Assets\Scripts\Red.cs" />
+    <Compile Include="Assets\Scripts\Notes.cs" />
+    <Compile Include="Assets\Scripts\NotesModel.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Assets\Resources\umiyurikaiteitan-expert.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />
