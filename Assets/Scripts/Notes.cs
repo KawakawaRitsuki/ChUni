@@ -11,7 +11,7 @@ public class Notes : MonoBehaviour {
     {
         if(nm.getColor() == 2)
         {
-            transform.localScale = new Vector3(nm.getSize(), 0.01f, nm.getHold() * speed * 1.5f + 1);
+            transform.localScale = new Vector3(nm.getSize() - 0.2f, 0.01f, nm.getHold() * speed * 1.5f + 1);
             Debug.Log(nm.getHold());
             transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + (transform.localScale.z - 1) / 2);
         }
