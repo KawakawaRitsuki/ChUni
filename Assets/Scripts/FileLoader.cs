@@ -92,6 +92,10 @@ public class FileLoader{
                                 size = 1;
                                 pos = i;
                                 break;
+                            case 'S':
+                                tmp = "S";
+                                pos = i;
+                                break;
                             case ':':
                                 if (target.StartsWith(":RHYTHM="))
                                 {
@@ -108,7 +112,7 @@ public class FileLoader{
                             case '2':
                             case 'R':
                                 size++;
-                                list[count].Add(new NotesModel(size, pos,0,bpm));
+                                //list[count].Add(new NotesModel(size, pos,0,bpm));
                                 size = 0;
                                 tmp = "";
                                 break;
@@ -116,7 +120,7 @@ public class FileLoader{
                                 size++;
                                 break;
                             default:
-                                list[count].Add(new NotesModel(size, pos, 0, bpm));
+                                //list[count].Add(new NotesModel(size, pos, 0, bpm));
                                 size = 0;
                                 tmp = "";
                                 break;
@@ -128,7 +132,7 @@ public class FileLoader{
                             case '2':
                             case 'Y':
                                 size++;
-                                list[count].Add(new NotesModel(size, pos, 1, bpm));
+                                //list[count].Add(new NotesModel(size, pos, 1, bpm));
                                 size = 0;
                                 tmp = "";
                                 break;
@@ -136,7 +140,7 @@ public class FileLoader{
                                 size++;
                                 break;
                             default:
-                                list[count].Add(new NotesModel(size, pos, 1, bpm));
+                                //list[count].Add(new NotesModel(size, pos, 1, bpm));
                                 size = 0;
                                 tmp = "";
                                 break;
@@ -166,9 +170,9 @@ public class FileLoader{
                                 
                                 hold = hold * (maxrhythm / rhythm);
 
-                                NotesModel nm = new NotesModel(size, pos, 2, bpm);
-                                nm.setHold(hold);
-                                list[count].Add(nm);
+                                //NotesModel nm = new NotesModel(size, pos, 2, bpm);
+                                //nm.hold = hold;
+                               // list[count].Add(nm);
                                 size = 0;
                                 tmp = "";
                                 break;
@@ -176,8 +180,88 @@ public class FileLoader{
                                 size++;
                                 break;
                             default:
-                                list[count].Add(new NotesModel(size, pos, 0, bpm));
+                                //list[count].Add(new NotesModel(size, pos, 0, bpm));
                                 size = 0;
+                                tmp = "";
+                                break;
+                        }
+                        break;
+                    case "S":
+                        switch (target.ToCharArray()[i])
+                        {
+                            case '2':
+                            case 'S':
+                                List <int[]> intArray = new List<int[]>();
+                                int[] l = {pos,i,0};
+                                intArray.Add(l);
+
+                                int line = 0;
+
+                                bool finished = false;
+                                for (int j = now + 1; j < end; j++)
+                                {
+                                    line++;
+
+                                    bool breakFlag = false;
+                                    bool clapFlag = false;
+                                    bool endFlag = false;
+                                    int start = 0;
+                                    for (int k = 0; k < split[j].Length; ++k)
+                                    {
+                                        if (breakFlag)
+                                        {
+                                            if (split[j].ToCharArray()[k] == 'B' || split[j].ToCharArray()[k] == '2')
+                                            {
+                                                int[] ll = { start, k ,line};
+                                                intArray.Add(ll);
+                                            }
+                                        }
+                                        else if (clapFlag)
+                                        {
+                                            if (split[j].ToCharArray()[k] == 'C' || split[j].ToCharArray()[k] == '2')
+                                            {
+                                                int[] ll = { start, k, line };
+                                                intArray.Add(ll);
+                                                finished = true;
+                                                break;
+                                            }
+                                        }
+                                        else if (endFlag)
+                                        {
+                                            if (split[j].ToCharArray()[k] == 'E' || split[j].ToCharArray()[k] == '2')
+                                            {
+                                                int[] ll = { start, k, line };
+                                                intArray.Add(ll);
+                                                finished = true;
+                                                break;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (split[j].ToCharArray()[k] == 'B')
+                                            {
+                                                breakFlag = true;
+                                                start = k;
+                                            }
+                                            if (split[j].ToCharArray()[k] == 'C')
+                                            {
+                                                clapFlag = true;
+                                                start = k;
+                                            }
+                                            if (split[j].ToCharArray()[k] == 'E')
+                                            {
+                                                endFlag = true;
+                                                start = k;
+                                            }
+                                        }
+                                    }
+                                    if (finished) { break; }
+                                        
+                                }
+                                
+                                NotesModel nm = new NotesModel(bpm);
+                                nm.slide = intArray;
+                                list[count].Add(nm);
                                 tmp = "";
                                 break;
                         }

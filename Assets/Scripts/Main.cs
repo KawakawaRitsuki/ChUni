@@ -1,50 +1,68 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Main : MonoBehaviour {
+public class Main : MonoBehaviour
+{
 
-    public GameObject redPrefub;
-    public GameObject yellowPrefub;
-    public GameObject holdPrefub;
+    public GameObject notesPrefub;
     public TextAsset textAsset;
+    public int speed;
     
-    int i = 0;
     List<List<NotesModel>> list;
     int notes = 0;
 
-    public int speed;
+    int bpm = 0;
+    int split = 0;
 
     private void Start()
     {
-        var textAsset = Resources.Load("umiyurikaiteitan-expert") as TextAsset;
-        FileLoader fl = new FileLoader(textAsset.text);
-        list = fl.getList();
+        list = new List<List<NotesModel>>();
+        TextAsset textAsset = Resources.Load("umiyurikaiteitan-expert") as TextAsset;
+
+        string body = "";
+        int line = 0;
+
+        for(int i = 0; i < 100; i++)
+            list.Add(new List<NotesModel>());
+
+
+        foreach (string s in textAsset.text.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries))
+        {                   
+            if (s.StartsWith("#")) continue;
+            if (s.StartsWith(":BPM=")) bpm = int.Parse(s.Substring(5));
+            if (s.StartsWith(":SPLIT=")) split = int.Parse(s.Substring(7));
+            if (s.StartsWith(":")) continue;
+
+            
+
+            string[] sp = s.Split(',');
+
+            int pos = int.Parse(sp[0]);
+            string type = sp[1];
+            int x_1 = int.Parse(sp[2]) - 1;
+            int x_2 = int.Parse(sp[3]) - 1;
+
+            if (type == "T")
+                list[pos].Add(new NotesModel(x_1, x_2, 0, bpm,split));
+            if (type == "E")
+                list[pos].Add(new NotesModel(x_1, x_2, 1, bpm, split));
+            if (type == "H")
+                list[pos].Add(new NotesModel(x_1, x_2, 2, bpm, split, int.Parse(sp[4])));
+                
+
+            line++;
+        }
 
         foreach (List<NotesModel> lnm in list)
         {
             foreach (NotesModel rn in lnm)
             {
-                Vector3 v = new Vector3((float)(-8 + rn.getSize() / 2 + rn.getPos()),0, 30.5f + notes * speed * 1.5f);
-
-                if (rn.getColor() == 0)
-                {
-                    GameObject red = Instantiate(redPrefub, v, transform.rotation);
-                    Notes r = red.GetComponent<Notes>();
-                    r.Create(rn,speed);
-                }
-                else if (rn.getColor() == 1)
-                {
-                    GameObject yellow = Instantiate(yellowPrefub,v,transform.rotation);
-                    Notes r = yellow.GetComponent<Notes>();
-                    r.Create(rn, speed);
-                }
-                else if (rn.getColor() == 2)
-                {
-                    GameObject hold = Instantiate(holdPrefub, v, transform.rotation);
-                    Notes r = hold.GetComponent<Notes>();
-                    r.Create(rn, speed);
-                }
+                Vector3 v = new Vector3(0, 0.01f, 30.5f + notes * speed * 1.5f);
+                GameObject n = Instantiate(notesPrefub, v, transform.rotation);
+                Notes r = n.GetComponent<Notes>();
+                r.Create(rn, speed);
             }
             notes++;
         }

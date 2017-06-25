@@ -1,59 +1,38 @@
-﻿public class NotesModel {
-    int size = 0;
-    int pos = 0;
-    int color = 0;
+﻿using System.Collections.Generic;
+
+public class NotesModel {
+    public int start = 0;
+    public int end = 0;
+    
+    public int type = 0;
     // 0 red
     // 1 yellow
     // 2 hold
-    int hold = 0;
+    public int hold = 0;
+    public List<int[]> slide = new List<int[]>();
 
-    int bpm = 0;
+    public int bpm = 0;
+    public int split = 0;
 
-    public NotesModel(int size,int pos,int color,int bpm)
+    public NotesModel(int bpm) { this.bpm = bpm; }
+
+    public NotesModel(int start,int end,int type,int bpm,int split)
     {
-        setSize(size);
-        setPos(pos);
-        setColor(color);
-        setBPM(bpm);
+        this.start = start;
+        this.end = end;
+        this.type = type;
+        this.bpm = bpm;
+        this.split = split;
     }
-    public int getSize()
+
+    public NotesModel(int start, int end, int type, int bpm, int split,int hold)
     {
-        return size;
+        this.start = start;
+        this.end = end;
+        this.type = type;
+        this.bpm = bpm;
+        this.split = split;
+        this.hold = hold;
     }
-    public void setSize(int s)
-    {
-        size = s;
-    }
-    public int getPos()
-    {
-        return pos;
-    }
-    public void setPos(int p)
-    {
-        pos = p;
-    }
-    public int getColor()
-    {
-        return color;
-    }
-    public void setColor(int c)
-    {
-        color = c;
-    }
-    public int getHold()
-    {
-        return hold;
-    }
-    public void setHold(int h)
-    {
-        hold = h;
-    }
-    public int getBPM()
-    {
-        return bpm;
-    }
-    public void setBPM(int b)
-    {
-        bpm = b;
-    }
+
 }
